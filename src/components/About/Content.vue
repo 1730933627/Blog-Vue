@@ -1,0 +1,123 @@
+<template>
+    <div class="bottom">
+        <div>
+            <div id="btop"></div>
+            <h1>YanLin Inc.</h1>
+            <div id="readme">
+                <div class="left">
+                    <p>法人名：稽智の琰凛</p>
+                    <p>设立日:2020年6月11日</p>
+                    <p>本站非商务网站</p>
+                    <p>有事可以联系QQ:1730933627</p>
+                    <p>主要内容:呈现了有关MMD的一系列自制动画。</p>
+                    <p>备案号:陇ICP备20002446号</p>
+                </div>
+                <transition name="info">
+                    <div class="right" v-show="finish">
+                        <p>当前粉丝:<span id="follower">{{fans}}</span></p>
+                        <p>今日:<span id="year">{{year}}</span>年<span id="month">{{month}}</span>月<span id=day>{{day}}</span>日</p>
+                        <p>请勿侵权</p>
+                        <p>可以闲聊哦~</p>
+                        <p>共有视频:<span id="sum_video">{{totalVideo}}</span></p>
+                        <p>以上</p>
+                    </div>
+                </transition>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import axios from 'axios'
+    export default {
+        name:"Content",
+        data(){
+            return{
+                finish:false,
+                fans:0,
+                totalVideo:0,
+            }
+        },
+        computed:{
+            year(){
+                const date = new Date();
+                return date.getFullYear();
+            },
+            month(){
+                const date = new Date();
+                return date.getMonth()+1;
+            },
+            day(){
+                const date = new Date();
+                return date.getDate();
+            }
+        },
+        beforeMount(){
+            axios.post('https://api.yanlinn.com/bl-api?relation=22516494').then(
+                response => {
+                    this.fans = response.data.message[0];
+                    this.totalVideo = response.data.message[1];
+                    this.finish = true;
+                },
+                error => {
+                    console.log(error);
+            })
+        }
+    }
+</script>
+
+<style scoped>
+    .info-enter-active {
+        animation: in .5s ease-out both;
+    }
+
+    .info-leave-active {
+        animation: in .5s reverse ease-in both;
+    }
+
+    @keyframes in {
+        0% {
+                transform: translateX(15%);
+                opacity: 0;
+        }
+        100% {
+                transform: translateX(0);
+                opacity: 1;
+        }
+    }
+    .bottom{
+        width:100%;
+        background-color: #87CEFA;
+        padding: 8.2vh 0 12vh;
+    }
+    .bottom h1{
+        user-select: none;
+        font-size: 6vh;
+        margin: 11vh 19.8% 0;
+        color: white;
+    }
+    .bottom #readme{
+        display: flex;
+        justify-content:space-between;
+        width:55%;
+        background-color: aliceblue;
+        margin: 0 auto;
+        box-shadow: 0px 5px 0.5vh aqua;
+        padding: 8vh 2vw;
+    }
+    .bottom #readme p{
+        padding: 0.5vh 0 1vh;
+        margin: 0 2vw;
+        font-size: 2.5vh;
+    }
+    #readme > div{
+        display: flex;
+        flex-direction: column;
+    }
+    #readme > .left{
+        align-items: flex-start;
+    }
+    #readme > .right{
+        align-items: flex-end;
+    }
+</style>
