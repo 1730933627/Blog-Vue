@@ -157,4 +157,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## License
 
-[Yan_Lin](https://github.com/1730933627/Blog-Vue3/blob/main/README.md)
+[Yan_Lin](https://github.com/1730933627/Blog-Vue3/blob/master/README.md)
