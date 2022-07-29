@@ -104,10 +104,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ## 文件树
 ```
 .
-├─preview
+├─preview   #预览图
 │  ├─landscape
 │  └─portrait
-├─public
+├─public    #静态资源
 │  ├─images
 │  │  ├─background
 │  │  │  └─article
@@ -119,15 +119,15 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 │  │     ├─22
 │  │     └─33
 │  └─style
-└─src
+└─src   #主要代码目录
     │  App.vue
     │  main.js
     ├─assets
     │  ├─config
-    │  │   ├─particlesjs-config.json
+    │  │   ├─particlesjs-config.json    #粒子系统配置
     │  │   └─waifu-tips.json
     │  └─live2d
-    ├─components
+    ├─components            #组件
     │  │  Live2D.vue
     │  │  MyLogo.vue
     │  │  Particle.vue
@@ -138,7 +138,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     │  ├─Home
     │  ├─News
     │  └─Subpage
-    ├─pages
+    ├─pages                 #页面
     │  ├─About.vue
     │  ├─Biography.vue
     │  ├─Contact.vue
@@ -146,9 +146,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     │  ├─Home.vue
     │  ├─News.vue
     │  └─NotFound.vue
-    ├─router
+    ├─router                #Vue-router
     │  └─index.js
-    └─store
+    └─store                 #Vuex
        ├─heardStatus.js
        ├─index.js
        ├─videoInfo.js
