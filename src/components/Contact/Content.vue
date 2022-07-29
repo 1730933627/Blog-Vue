@@ -1,6 +1,6 @@
 <template>
     <div class="contact">
-        <h1>Contsat</h1>
+        <h1>Contact</h1>
         <div class="contact-body">
             <div class="interval">
                 <div class="title">发送类型:</div>

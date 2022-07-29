@@ -67,6 +67,27 @@ import axios from 'axios'
 </script>
 
 <style scoped>
+  @media screen and (orientation: landscape) {
+    .bottom #readme{
+        width:55%;
+        padding: 8vh 2vw;
+    }
+    .bottom h1{
+        margin: 11vh 19.8% 0;
+    }
+  }
+  @media screen and (orientation: portrait) {
+    .bottom #readme{
+        width:80%;
+        padding: 3vh 3vw 5vh;
+    }
+    #readme .right{
+        display: none;
+    }
+    .bottom h1{
+        margin: 11vh 10% 1.5vh;
+    }
+  }
     .info-enter-active {
         animation: in .5s ease-out both;
     }
@@ -93,17 +114,14 @@ import axios from 'axios'
     .bottom h1{
         user-select: none;
         font-size: 6vh;
-        margin: 11vh 19.8% 0;
         color: white;
     }
     .bottom #readme{
         display: flex;
         justify-content:space-between;
-        width:55%;
         background-color: aliceblue;
         margin: 0 auto;
         box-shadow: 0px 5px 0.5vh aqua;
-        padding: 8vh 2vw;
     }
     .bottom #readme p{
         padding: 0.5vh 0 1vh;

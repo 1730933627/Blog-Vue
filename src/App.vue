@@ -44,8 +44,6 @@
 </script>
 
 <style>
-  @media screen and (orientation: landscape) {}
-  @media screen and (orientation: portrait) {}
   *{
     padding: 0;
     margin: 0;
