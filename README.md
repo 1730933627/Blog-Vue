@@ -1,10 +1,20 @@
 # YanLin-Blog-Vue3
 
 > 使用Vue3的前后端分离的个人博客
+>
+> [在线演示](https://www.yanlinn.com)
+> 
+> 后端API [地址](https://api.yanlinn.com)
 
 ## 主要技术构成
 
-> Vue3/Vuex/Vue-router/Css3/H5等
+> Vue3全家桶
+- [Vue Cli（Vue 脚手架工具）](https://cli.vuejs.org/zh/)
+- [Vue（核心框架）](https://cn.vuejs.org/)
+- [Vue Router（页面路由）](https://router.vuejs.org/zh/)
+- [Vuex（状态管理）](https://vuex.vuejs.org/zh/)
+- ES 6 / 7 （JavaScript 语言的下一代标准）
+- Axios（网络请求）
 
 ## 使用
 <details>
@@ -104,22 +114,22 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ## 文件树
 ```
 .
-├─preview   #预览图
+├─preview                               #预览图
 │  ├─landscape
 │  └─portrait
-├─public    #静态资源
+├─public                                #静态资源
 │  ├─images
 │  │  ├─background
 │  │  │  └─article
 │  │  └─icon
 │  ├─img
 │  │  └─封面
-│  ├─live2d
+│  ├─live2d                             #live2D模型
 │  │  └─bilibili-live
 │  │     ├─22
 │  │     └─33
-│  └─style
-└─src   #主要代码目录
+│  └─style                              #某些静态样式
+└─src                                   #主要代码目录
     │  App.vue
     │  main.js
     ├─assets
@@ -127,10 +137,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     │  │   ├─particlesjs-config.json    #粒子系统配置
     │  │   └─waifu-tips.json
     │  └─live2d
-    ├─components            #组件
-    │  │  Live2D.vue
+    ├─components                        #组件
+    │  │  Live2D.vue                    #live2D的组件
     │  │  MyLogo.vue
-    │  │  Particle.vue
+    │  │  Particle.vue                  #粒子背景组件
     │  ├─About
     │  ├─Biography
     │  ├─Contact
@@ -138,7 +148,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     │  ├─Home
     │  ├─News
     │  └─Subpage
-    ├─pages                 #页面
+    ├─pages                             #页面
     │  ├─About.vue
     │  ├─Biography.vue
     │  ├─Contact.vue
@@ -146,9 +156,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     │  ├─Home.vue
     │  ├─News.vue
     │  └─NotFound.vue
-    ├─router                #Vue-router
+    ├─router                            #Vue-router
     │  └─index.js
-    └─store                 #Vuex
+    └─store                             #Vuex
        ├─heardStatus.js
        ├─index.js
        ├─videoInfo.js
