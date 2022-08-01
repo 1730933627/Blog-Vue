@@ -5,6 +5,13 @@ export default {
         getInfoList(context,value=false){
             if(!context.state.initList.length){
                 axios.post('https://api.yanlinn.com/getvideoinfo').then(res => {
+                    res.data.data.forEach(element => {
+                        if(element.img_url.split("/").length === 1){
+                            element.img_url = "/images/cover/"+element.img_url;
+                        }else if(element.img_url.split("/").length === 4){
+                            element.img_url = "/images/cover/"+element.img_url.split("/")[3];
+                        }
+                    });
                     context.commit('saveInfoList',{data:res.data.data,status:value});
                 }).catch(err=>{
                     console.log(err);
