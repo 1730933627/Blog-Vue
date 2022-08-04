@@ -1,11 +1,11 @@
 <template>
-    <div class="open_menu" @click="isShow=!isShow">
+    <div class="open_menu" @click="isShow=!isShow" :style="HomeStyle">
         <img src="images/icon/menu.png"/>
     </div>
-    <div class="top"></div> 
+    <div class="top" v-show="isHome"></div> 
     <transition name="menu">
-        <div class="menu_list" v-show="isShow">
-            <ul>    
+        <div class="menu_list" v-show="isShow" :style="HomeStyle">
+            <ul>
                 <router-link to="/"><li class="list">Home</li></router-link>
                 <router-link to="/news"><li class="list">News</li></router-link>
                 <router-link to="/biography"><li class="list">Biography</li></router-link>
@@ -13,7 +13,7 @@
                     <li class="list">
                         <div class="dropdown">
                             <span>Links</span>
-                            <div class="dropdown-content">
+                            <div class="dropdown-content" :style="dropdownStyle">
                                 <a href="https://space.bilibili.com/22516494" target="_blank">BiliBili</a>
                                 <a href="https://ecchi.iwara.tv/users/yanlin-0" target="_blank">Iwara</a>
                             </div>
@@ -40,6 +40,15 @@
         computed:{
             ...mapGetters('heardStatus',['getStatus']),
             ...mapGetters('windowSize',['getHeight','isLandscape']),
+            isHome(){
+                return this.$route.fullPath == "/"?false:true;
+            },
+            HomeStyle(){
+                return this.isHome?"right:1%":this.isLandscape?"right:2.5%":"left:2.5%;";
+            },
+            dropdownStyle(){
+                return this.isHome ? this.isLandscape?"left:22.5%":"right:125%;":this.isLandscape?"left:22.5%":"left:225%;";
+            }
         },
         watch:{
             getHeight(){
@@ -62,7 +71,6 @@
     }
     .menu_list{
         top: 2.5%;
-        right:2.5%;
     }
     .menu_list ul{
         align-items: center;
@@ -83,15 +91,15 @@
     }
     .dropdown-content a{
         animation: dropdownR 0.5s ease-in-out;
-        line-height: 200%;
-        margin-right: 1vw;
     }
     .menu_list ul > a:hover,#Links:hover{
         transform:translate(0px,-0.5vh);
-        transition:transform 0.3s ease-in-out;
     }
     .list{
-        margin: 0.75vh 1.5vw;
+        margin: 1vh 2.5vh;
+    }
+    .dropdown-content a{
+        margin-right: 2.5vh;
     }
 }
 @media screen and (orientation: portrait) {
@@ -102,31 +110,28 @@
         width: 7.5vh;
         position: fixed;
         top:0;
-        right:0;
     }
     .open_menu img{
         width: 100%;
     }
     .menu_list{
         top: 10.5%;
-        right:2.5%;
     }
     .menu_list ul{
         flex-direction: column;
     }
-    #Links,ul a,ul a:visited{
+    #Links,ul a,ul a:visited,.dropdown-content > a{
         color:#00BFFF;
         background-color: white;
-        margin: 0.5vh 0;
         border-radius: 1vh;
-        /* height: 3vh; */
         box-shadow: 0 0 0.5vh #00BFFF;
+        padding: .6vh;
+        margin: .25vh 0;
     }
     .dropdown-content{
         display: none;
         flex-direction: column;
-        position: fixed;
-        left: 250%;
+        position: absolute;
         top: -40%;
     }
     @keyframes dropdownP{
@@ -135,18 +140,14 @@
     }
     .dropdown-content a{
         animation: dropdownP 0.5s ease-in-out;
-        line-height: 3vh;
-        margin-right: 1vw;
-        padding: 0 1vw;
     }
     .menu_list ul > a:hover,#Links:hover{
         transform:translate(1vw,0px);
-        transition:transform 0.3s ease-in-out;
-    }
-    .list{
-        margin: 3% 1.5vw;
     }
 }
+    .menu_list ul > a,#Links{
+        transition: transform 0.25s ease-in-out;
+    }
     .top{
         position: fixed;
         top: 0;
@@ -164,16 +165,13 @@
         display: flex;
         list-style-type:none;
     }
-    .list{
+    ul a,ul a:visited,#Links{
         font-weight:bold;
-    }
-    ul a,ul a:visited{
         text-decoration: none;
         font-size: 2.25vh;
     }
     #Links{
         cursor: default;
-        font-size: 2.25vh;
     }
     .dropdown{
         position: relative;

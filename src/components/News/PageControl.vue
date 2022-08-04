@@ -13,12 +13,10 @@
         computed:{
             ...mapState('videoInfo',['news']),
             totalPage(){
-                if(this.news.Page === 0){
-                    return ['首页',this.news.Page+1,this.news.PageEnd-1]
-                }else if(this.news.Page === this.news.PageEnd-1){
-                    return [0,this.news.Page-1,'尾页']
+                if(this.news.Page === 0 || this.news.Page === this.news.PageEnd){
+                    return ['首页','尾页']
                 }else{
-                    return [0,'第'+this.news.Page+'页',this.news.PageEnd-1]
+                    return [1,'第'+(this.news.Page+1)+'页',this.news.PageEnd+1]
                 }
             }
         },
@@ -31,9 +29,13 @@
                 this.changeNewsPage(this.news.Page+1);
             },
             goPage(event){
-                let pageNum = parseInt(event.target.innerHTML.replace(/[^0-9]/ig,""))
-                if(pageNum !== this.news.Page){
-                    this.changeNewsPage(pageNum);
+                if(event.target.innerHTML == '首页'){
+                    this.changeNewsPage(0);
+                }else if(event.target.innerHTML == '尾页'){
+                    this.changeNewsPage(this.news.PageEnd);
+                }else{
+                    let pageNum = parseInt(event.target.innerHTML.replace(/[^0-9]/ig,""))
+                    this.changeNewsPage(pageNum-1);
                 }
             }
         },
@@ -78,7 +80,7 @@
   }
     .perpage{
         display: flex;
-        padding: 1vh 0 3vh;
+        padding: 3.5vh 0 5vh;
         margin: 0 auto;
         justify-content: space-between;
         align-items: center;

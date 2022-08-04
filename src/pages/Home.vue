@@ -1,6 +1,6 @@
 <template>
     <transition name="loading">
-        <Loading v-if='isLoading'/>
+        <Loading v-if='Loading'/>
         <div v-else>
             <!-- <Particle/> -->
             <Background/>
@@ -16,11 +16,12 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
     // import Particle from '@/components/Particle'
     import Loading from '@/components/Home/Loading'
     import Background from '@/components/Home/Background'
     import MyLogo from '@/components/MyLogo'
-    import LinkList from '@/components/Home/LinkList'
+    import LinkList from '@/components/Subpage/LinkList'
     import Sidebar from '@/components/Home/Sidebar'
     import Topics from '@/components/Home/Topics'
     import Heart from '@/components/Home/Heart'
@@ -40,13 +41,20 @@
         },
         data(){
             return{
-                isLoading:true,
+                Loading:true,
             }
         },
+        computed:{
+            ...mapGetters('videoInfo',['isInit'])
+        },
         mounted(){
-            setTimeout(() => {
-                this.isLoading = !this.isLoading;
-            },1000)
+            if(this.isInit){
+                setTimeout(() => {
+                    this.Loading = false;
+                },1500)
+            }else{
+                this.Loading = false;
+            }
         }
     }
 </script>

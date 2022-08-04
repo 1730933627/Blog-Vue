@@ -33,14 +33,14 @@ export default {
             }else{
                 state.info = value.data;
             }
-            state.news.PageEnd = Math.floor(state.info.length / state.news.PageSize)+1;
+            state.news.PageEnd = Math.floor(state.info.length / state.news.PageSize);
             state.download.PageEnd = Math.floor(state.info.length / state.download.PageSize);
         },
         changeType(state,value){
             state.type = value;
         },
         changeNewsPage(state,value){
-            if(value >= 0 && value < state.news.PageEnd){
+            if(value >= 0 && value <= state.news.PageEnd){
                 state.news.Page = value;
             }
         },
@@ -49,7 +49,7 @@ export default {
             state.news.PageEnd = Math.floor(value / state.news.PageSize)+1;
         },
         changeDownloadPage(state,value){
-            if(value >= 0 && value < state.download.PageEnd){
+            if(value >= 0 && value <= state.download.PageEnd){
                 state.download.Page = value;
             }
         },
@@ -85,6 +85,12 @@ export default {
         },
     },
     getters:{
+        isInit(state){
+            return state.initList.length === 0;
+        },
+        isLoading(state){
+            return state.info.length === 0;
+        },
         readDownloadItem(state){
             return state.download.item;
         },

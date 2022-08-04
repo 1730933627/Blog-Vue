@@ -7,6 +7,7 @@
             <div class="f-item" v-show="getStatus"><a href="https://azz.net/yanlin" target="_blank"><img src="images/icon/AZZ.png"/></a></div>
             <div class="f-item" v-show="getStatus"><a href="https://yanlinn.huotan.com" target="_blank"><img src="images/icon/HTW.png"/></a></div>
             <div class="f-item" v-show="!getStatus"><a href="https://www.aplaybox.com/u/178812252" target="_blank"><img src="images/icon/MZW.png"/></a></div>
+            <div class="f-item" v-show="!getStatus"><a href="https://github.com/1730933627" target="_blank"><img src="images/icon/GIT.png"/></a></div>
         </div>
         <transition name="wx">    
             <div class="wx" v-show="isShow">

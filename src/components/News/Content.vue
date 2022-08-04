@@ -1,7 +1,8 @@
 <template>
     <div class="bottom" id="bottom">
         <div id="btop"></div>
-        <div class="news-list">
+        <Loading v-if="isLoading"/>
+        <div class="news-list" v-else>
             <NewsSort/>
             <NewsList/>
             <PageControl/>
@@ -10,6 +11,8 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
+    import Loading from '../Subpage/Loading'
     import NewsSort from '@/components/News/NewsSort'
     import NewsList from '@/components/News/NewsList'
     import PageControl from '@/components/News/PageControl'
@@ -19,7 +22,11 @@
         components:{
             NewsList,
             NewsSort,
-            PageControl
+            PageControl,
+            Loading
+        },
+        computed:{
+            ...mapGetters('videoInfo',['isLoading'])
         },
     }
 </script>

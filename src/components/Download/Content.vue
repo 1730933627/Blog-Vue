@@ -3,16 +3,19 @@
         <div class="title">
             <h2>Download</h2>
         </div>
-        <DownloadList/>
-        <transition name="detail">
-            <Detail v-if="readDownloadItem.show" :item="readDownloadItem.info" :addSpop="addSpop"/>
-        </transition>
-        <div class="spop-body">
-            <transition-group name="spop">
-                <Spop v-for="(spop,index) in spopList" :key="index" :spop="spop" :deleteSpop="deleteSpop"/>
-            </transition-group>
-        </div>
+        <Loading v-if="isLoading" />
+        <div class="content" v-else>
+            <DownloadList/>
+            <transition name="detail">
+                <Detail v-if="readDownloadItem.show" :item="readDownloadItem.info" :addSpop="addSpop"/>
+            </transition>
+            <div class="spop-body">
+                <transition-group name="spop">
+                    <Spop v-for="(spop,index) in spopList" :key="index" :spop="spop" :deleteSpop="deleteSpop"/>
+                </transition-group>
+            </div>
         <PageControl/>
+        </div>
     </div>
 </template>
 
@@ -23,6 +26,7 @@
     import Detail from './Detail';
     import PageControl from './PageControl'
     import Spop from '@/components/Subpage/Spop';
+    import Loading from '../Subpage/Loading';
     export default {
         name:"Download",
         data(){
@@ -31,7 +35,7 @@
             }
         },
         computed:{
-            ...mapGetters('videoInfo',['readDownloadItem'])
+            ...mapGetters('videoInfo',['readDownloadItem','isLoading'])
         },
         methods:{
             addSpop(status){
@@ -45,7 +49,8 @@
             DownloadList,
             Detail,
             Spop,
-            PageControl
+            PageControl,
+            Loading
         }
     }
 </script>
@@ -100,10 +105,16 @@
     .main-body .title{
         font-size: 6vh;
     }
+    .content{
+        min-height: 60vh;
+    }
   }
   @media screen and (orientation: portrait) {
     .main-body .title{
         font-size: 3vh;
+    }
+    .content{
+        min-height: 65vh;
     }
   }
     .main-body{

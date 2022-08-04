@@ -7,11 +7,10 @@
             <img src="images/icon/WX.png"/>
         </div>
         <transition name="QR">
-            <div class="wx" v-show="showQR">
+            <div class="wx" :style="wxStyle" v-show="showQR">
                 <img src="images/icon/wx.jpg"/>
             </div>
         </transition>
-        <!-- <script>sidebar()</script> -->
         <div class="item_list" v-show="getStatus">
             <a href="https://www.patreon.com/YanLinn" target="_blank">
                 <img src="images/icon/PT.png"/>
@@ -32,6 +31,11 @@
                 <img src="images/icon/MZW.png"/>
             </a>
         </div>
+        <div class="item_list" v-show="!getStatus">
+            <a href="https://github.com/1730933627" target="_blank">
+                <img src="images/icon/GIT.png"/>
+            </a>
+        </div>
     </div>
 </template>
 
@@ -46,6 +50,10 @@
         },
         computed:{
             ...mapGetters('heardStatus',['getStatus']),
+            ...mapGetters('windowSize',['isLandscape']),
+            wxStyle(){
+                return this.isLandscape?"left: -8vw;top: 0.5vh;":"right:100%;top: 2.5vh";
+            }
         },
         methods:{
             openQQ(){
@@ -119,13 +127,12 @@
     .wx{
         position: absolute;
         line-height: 0;
-        padding: 0.3vw;
+        padding: 0.5vh;
         margin: 2vh;
-        border-radius: 5px;
+        border-radius: .5vh;
         box-shadow: 0 0 1vh #63B8FF;
-        left: -8vw;
-        top: 0.5vh;
         transition: all 0.5s ease-in-out;
+        background-color: white;
     }
     .wx img{
         width: 10vh;

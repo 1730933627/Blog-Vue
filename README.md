@@ -6,7 +6,7 @@
 > 
 > 后端API [地址](https://api.yanlinn.com)
 
-## 主要技术构成
+## 主要技术栈
 
 > Vue3全家桶
 - [Vue Cli（Vue 脚手架工具）](https://cli.vuejs.org/zh/)

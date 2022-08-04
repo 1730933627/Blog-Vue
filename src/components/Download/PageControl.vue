@@ -13,12 +13,10 @@
         computed:{
             ...mapState('videoInfo',['download']),
             totalPage(){
-                if(this.download.Page === 0){
-                    return ['首页',this.download.Page+1,this.download.PageEnd-1]
-                }else if(this.download.Page === this.download.PageEnd-1){
-                    return [0,this.download.Page-1,'尾页']
+                if(this.download.Page === 0 || this.download.Page === this.download.PageEnd){
+                    return ['首页','尾页']
                 }else{
-                    return [0,'第'+this.download.Page+'页',this.download.PageEnd-1]
+                    return [1,'第'+(this.download.Page+1)+'页',this.download.PageEnd+1]
                 }
             }
         },
@@ -31,9 +29,13 @@
                 this.changeDownloadPage(this.download.Page+1);
             },
             goPage(event){
-                let pageNum = parseInt(event.target.innerHTML.replace(/[^0-9]/ig,""))
-                if(pageNum !== this.download.Page){
-                    this.changeDownloadPage(pageNum);
+                if(event.target.innerHTML == '首页'){
+                    this.changeDownloadPage(0);
+                }else if(event.target.innerHTML == '尾页'){
+                    this.changeDownloadPage(this.download.PageEnd);
+                }else{
+                    let pageNum = parseInt(event.target.innerHTML.replace(/[^0-9]/ig,""))
+                    this.changeDownloadPage(pageNum-1);
                 }
             }
         }

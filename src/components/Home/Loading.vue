@@ -1,44 +1,36 @@
 <template>
-    <div>
+    <div class="loading-body">
         <div class="spinner">
-            <div :class="[spinnerSonClass,'rect1']"></div>
-            <div :class="[spinnerSonClass,'rect2']"></div>
-            <div :class="[spinnerSonClass,'rect3']"></div>
-            <div :class="[spinnerSonClass,'rect4']"></div>
-            <div :class="[spinnerSonClass,'rect5']"></div>
-            <div :class="[spinnerSonClass,'rect6']"></div>
+            <div v-for="i in 6" :key="i" :class="[spinnerSonClass,'rect'+i]"></div>
         </div>
-        <div class="loading-background" :style="'height:'+loadingHeight+ 'px'"></div>
+        <div class="loading-background" :style="'height:'+ this.getHeight +'px'"></div>
     </div>
 </template>
 
 <script>
-export default {
-    name:'Loading',
-    data(){
-        return{
-            loadingHeight:window.innerHeight||0,
-            screenHeight:0,
-            spinnerSonClass:'spinner-son-R'
-        }
-    },
-    computed:{
-        backgroundStyle(){
-            let height = 'height:'+ this.loadingHeight + 'px;'
-            return height
-        }
-    },
-    created(){
-        if(window.innerHeight<window.innerWidth){
-            this.spinnerSonClass = 'spinner-son-R';
-        }else{
-            this.spinnerSonClass = 'spinner-son-P';
+    import "@/assets/pace/pace.min.js"
+    import "@/assets/pace/minimal.css"
+    import {mapGetters} from 'vuex'
+    export default {
+        name:'Loading',
+        computed:{
+            ...mapGetters('windowSize',['getHeight','isLandscape']),
+        },
+        created(){
+            if(this.isLandscape){
+                this.spinnerSonClass = 'spinner-son-L';
+            }else{
+                this.spinnerSonClass = 'spinner-son-P';
+            }
         }
     }
-}
 </script>
 
 <style scoped>
+    .loading-body{
+        display: flex;
+        justify-content: center;
+    }
     .loading-background{
         width: 100%;
         background-color: white;
@@ -47,14 +39,12 @@ export default {
     }
     .spinner {
         z-index: 100;
-        position: absolute;
-        top: 42vh;
-        left: 47vw;
         height: 10vh;
+        margin-top: 40vh;
         text-align: center;
         user-select: none;
     }
-    .spinner-son-R{
+    .spinner-son-L{
         background-color: #63B8FF;
         height: 100%;
         width: 0.4vw;

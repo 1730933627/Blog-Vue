@@ -6,7 +6,7 @@
     import 'particles.js/particles'
     const particlesJS = window.particlesJS;
     particlesJS.load('particles-js', '@/assets/config/particlesjs-config.json', ()=>{
-        // console.log('callback - particles.js config loaded');
+        console.log('callback - particles.js config loaded');
     });
     export default {
         name:'Particle'

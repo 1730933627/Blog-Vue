@@ -2,7 +2,7 @@
     <div class="section">
         <div id="centerview">
             <h1>HISTORY</h1>
-            <h1  v-if="!loaded">Loading</h1>
+            <Loading v-if="!loaded"/>
             <div id="history-list" v-else>
                 <div class="year-group" v-for="(year,i) of msgs_sort" :key="i">
                     <p id="year-a">
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+    import Loading from '../Subpage/Loading'
     import axios from 'axios'
     export default {
         name:"Content",
@@ -56,6 +57,7 @@
                 return Object.entries(this.msgs).reverse();
             }
         },
+        components:{Loading}
     }
 </script>
 
