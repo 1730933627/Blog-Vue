@@ -1,10 +1,9 @@
 <template>
     <div class="bmenu">
-        <h1>NEWS</h1>
         <ul class="menu">
             <div class="button" @click="change('All')"><li>All</li></div>
             <div class="button" @click="change('Video')"><li>Video</li></div>
-            <div class="button" @click="change('Program')"><li>Program</li></div>
+            <div class="button" @click="change('Article')"><li>Article</li></div>
             <div class="button" @click="change('Clothes')"><li>Clothes</li></div>
         </ul>
     </div>
@@ -30,10 +29,7 @@
 <style scoped>
   @media screen and (orientation: landscape) {
     .bmenu{
-        width:65vw;
-    }
-    .bmenu h1{
-        font-size: 10vh;
+        width:67.5vw;
     }
     .button{
         min-width: 4.5vh;
@@ -43,10 +39,7 @@
   }
   @media screen and (orientation: portrait) {
     .bmenu{
-        width:75vw;
-    }
-    .bmenu h1{
-        font-size: 8vh;
+        width:77.5vw;
     }
     .button{
         min-width: 5vh;
@@ -63,12 +56,6 @@
     }
     .bmenu > ul{
         list-style-type:none;
-    }
-    .bmenu h1{
-        display: inline;
-        color: aliceblue;
-        user-select:none;
-        cursor:default;
     }
     .menu{
         margin-left: auto;

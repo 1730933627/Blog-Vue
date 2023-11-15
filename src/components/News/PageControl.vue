@@ -14,7 +14,7 @@
             ...mapState('videoInfo',['news']),
             totalPage(){
                 if(this.news.Page === 0 || this.news.Page === this.news.PageEnd){
-                    return ['首页','尾页']
+                    return ["首页","尾页"]
                 }else{
                     return [1,'第'+(this.news.Page+1)+'页',this.news.PageEnd+1]
                 }
@@ -29,9 +29,9 @@
                 this.changeNewsPage(this.news.Page+1);
             },
             goPage(event){
-                if(event.target.innerHTML == '首页'){
+                if(event.target.innerHTML === '首页'){
                     this.changeNewsPage(0);
-                }else if(event.target.innerHTML == '尾页'){
+                }else if(event.target.innerHTML === '尾页'){
                     this.changeNewsPage(this.news.PageEnd);
                 }else{
                     let pageNum = parseInt(event.target.innerHTML.replace(/[^0-9]/ig,""))
@@ -91,21 +91,23 @@
         padding: .5vh 1vh;
         border-radius: .5vh;
         cursor: pointer;
-        box-shadow: rgb(0 142 224) 0px 0px .75vh;
+        box-shadow: rgb(0 142 224) 0 0 .75vh;
         transition: transform 0.25s ease-in-out;
+        white-space: nowrap;
     }
     .perpage .page:hover{
         transform: scale(1.1);
     }
     .perpage button{
-        text-align: center;
-        display: inline-block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         border: 0;
         font-weight: bold;
         color: rgb(54, 54, 54);
         background-color: #fff;
         cursor:pointer;
-        box-shadow: rgb(0 142 224) 0px 0px .75vh;
+        box-shadow: rgb(0 142 224) 0 0 .75vh;
         transition: all 0.45s linear;
     }
     .perpage button:hover{
@@ -113,24 +115,25 @@
     }
     .perpage #pre span,.perpage #next span {
         cursor: pointer;
-        display: inline-block;
         position: relative;
         transition: 0.5s ease-in-out;
+        display: flex;
+        align-items: center;
     }
     .perpage #next span:after,.perpage #pre span:after{
         position: absolute;
-        font-size: 2vh;
+        font-size: 1em;
         opacity: 0;
-        top: 0;
         transition: 0.5s ease-in-out;
+        line-height: 100%;
     }
     .perpage #next span:after {
         content: '▶';
-        right: 0vh;
+        right: 0;
     }
     .perpage #pre span:after {
         content: '◀';
-        left: 0vh;
+        left: 0;
     }
     .perpage #next:hover span:after {
         opacity: 1;

@@ -1,11 +1,7 @@
 <template>
     <footer class="footer">
-        <div>
-            <p><a href="https://beian.miit.gov.cn"><span>陇ICP备20002446号</span></a></p>
-        </div>
-        <div>
-            <p><span>@稽智の琰凛</span><router-link to="/about"><span>YanLin Inc</span></router-link></p>
-        </div>
+<!--        <p><a href="https://beian.miit.gov.cn"><span>陇ICP备20002446号</span></a></p>-->
+        <p><span>@YanLin</span><router-link to="/about"><span>YanLin Inc</span></router-link></p>
     </footer>
 </template>
 
@@ -22,7 +18,8 @@
         left:0;
         width: 100%;
         display: flex;
-        justify-content: space-between;
+        /*justify-content: space-between;*/
+        justify-content: flex-end;
     }
     .footer p{
         display: block;

@@ -24,10 +24,10 @@
 
 <style scoped>
     .background-enter-active {
-        animation: backgroundIn .3s ease-out both;
+        animation: backgroundIn .25s ease-out both;
     }
     .background-leave-active {
-        animation: backgroundIn .3s reverse ease-in both;
+        animation: backgroundIn .25s reverse ease-in both;
     }
     @keyframes backgroundIn {
         0% {
@@ -38,10 +38,10 @@
         }
     }
     .message-enter-active {
-        animation: roadRunnerIn .3s ease-out both;
+        animation: roadRunnerIn .25s ease-out both;
     }
     .message-leave-active {
-        animation: roadRunnerOut .3s ease-in both;
+        animation: roadRunnerOut .25s ease-in both;
     }
     @keyframes roadRunnerIn {
         0% {

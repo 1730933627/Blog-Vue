@@ -2,27 +2,32 @@
     <div class="section">
         <div id="centerview">
             <h1>HISTORY</h1>
-            <Loading v-if="!loaded"/>
-            <div id="history-list" v-else>
-                <div class="year-group" v-for="(year,i) of msgs_sort" :key="i">
-                    <p id="year-a">
-                        <span>{{year[0]}}</span>
-                    </p>
-                    <div class="date-item" v-for="item of year[1]" :key="item.id">
-                        <div id="item-inner">
-                            <p id="date">{{item.month}}</p>
-                            <p class="caption">{{item.text}}</p>
+            <Error v-if="isError"></Error>
+            <template v-else>
+                <Loading v-if="!loaded"/>
+                <div id="history-list" v-else>
+                    <div class="year-group" v-for="(year,i) of msgs_sort" :key="i">
+                        <p id="year-a">
+                            <span>{{year[0]}}</span>
+                        </p>
+                        <div class="date-item" v-for="item of year[1]" :key="item.id">
+                            <div id="item-inner">
+                                <p id="date">{{item.month}}</p>
+                                <p class="caption">{{item.text}}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </template>
         </div>
     </div>
 </template>
 
 <script>
-    import Loading from '../Subpage/Loading'
+    import {mapGetters} from 'vuex'
     import axios from 'axios'
+    import Loading from '../Subpage/Loading'
+    import Error from '../Subpage/Error.vue'
     export default {
         name:"Content",
         data(){
@@ -36,7 +41,7 @@
             }
         },
         beforeMount(){
-            axios.post('https://api.yanlinn.com/getdynamic').then(
+            axios.post(process.env.VUE_APP_URL+'getdynamic').then(
                 response => {
                     const year = {}
                     for(let v of response.data.data){
@@ -55,9 +60,10 @@
         computed:{
             msgs_sort(){
                 return Object.entries(this.msgs).reverse();
-            }
+            },
+            ...mapGetters('videoInfo',['isError']),
         },
-        components:{Loading}
+        components:{Loading,Error}
     }
 </script>
 
@@ -134,8 +140,8 @@
         z-index: -2;
     }
     @keyframes item-in{
-        0%{opacity: 0;}
-        100%{opacity: 1;}
+        0%{opacity: 0;transform: translateY(-1vh)}
+        100%{opacity: 1;transform: translateY(0)}
     }
     .date-item{
         padding: 2vh 0;

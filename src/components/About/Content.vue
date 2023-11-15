@@ -1,5 +1,5 @@
 <template>
-    <div class="bottom">
+    <div class="bottom" :style="bottomHeight">
         <div>
             <div id="btop"></div>
             <h1>YanLin Inc.</h1>
@@ -18,7 +18,7 @@
                         <p>今日:<span id="year">{{year}}</span>年<span id="month">{{month}}</span>月<span id=day>{{day}}</span>日</p>
                         <p>请勿侵权</p>
                         <p>可以闲聊哦~</p>
-                        <p>共有视频:<span id="sum_video">{{totalVideo}}</span></p>
+                        <p>感谢所有的投喂</p>
                         <p>以上</p>
                     </div>
                 </transition>
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 import axios from 'axios'
     export default {
         name:"Content",
@@ -35,10 +36,10 @@ import axios from 'axios'
             return{
                 finish:false,
                 fans:0,
-                totalVideo:0,
             }
         },
         computed:{
+            ...mapGetters('windowSize',["getHeight","isLandscape"]),
             year(){
                 const date = new Date();
                 return date.getFullYear();
@@ -50,18 +51,22 @@ import axios from 'axios'
             day(){
                 const date = new Date();
                 return date.getDate();
+            },
+            bottomHeight(){
+                return `min-height:${this.getHeight*0.68}px;`
             }
         },
         beforeMount(){
-            axios.post('https://api.yanlinn.com/bl-api?relation=22516494').then(
-                response => {
-                    this.fans = response.data.message[0];
-                    this.totalVideo = response.data.message[1];
+            if(this.isLandscape){
+              axios.post(process.env.VUE_APP_URL+'bl-api?uid=22516494').then(
+                  response => {
+                    this.fans = response.data.message.fans;
                     this.finish = true;
-                },
-                error => {
+                  },
+                  error => {
                     console.log(error);
-            })
+                  })
+            }
         }
     }
 </script>
@@ -85,17 +90,15 @@ import axios from 'axios'
         display: none;
     }
     .bottom h1{
-        margin: 11vh 10% 1.5vh;
+        margin: 11vh 7vw 1.5vh;
     }
   }
     .info-enter-active {
         animation: in .5s ease-out both;
     }
-
     .info-leave-active {
         animation: in .5s reverse ease-in both;
     }
-
     @keyframes in {
         0% {
                 transform: translateX(15%);

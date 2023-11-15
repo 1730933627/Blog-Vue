@@ -3,7 +3,7 @@
     <LinkList/>
     <div class="errorBody" :style="'height:'+getHeight+'px'">
         <h1>非常抱歉,你要找的页面不见喏...</h1>
-        <h2>5秒后将跳回主页</h2>
+        <h2 v-text="text"></h2>
     </div>
     <Footer/>
 </template>
@@ -15,6 +15,11 @@
     import Footer from '@/components/Subpage/Footer'
     export default {
         name:"About",
+        data(){
+          return{
+            text:"5秒后将跳回主页"
+          }
+        },
         computed:{
             ...mapGetters('windowSize',['getHeight'])
         },
@@ -24,11 +29,17 @@
             Footer,
         },
         mounted(){
-            setTimeout(() => {
-                this.$router.replace({
-                    name:'Home'
-                })
-            },5000)
+            if(this.$route.meta.beforePath!=="/"){
+              this.text = "3秒之后返回";
+              setTimeout(() => {
+                this.$router.back()
+              },3000)
+            }else{
+              this.text = "5秒后将跳回主页";
+              setTimeout(() => {
+                this.$router.replace({name:'Home'})
+              },5000)
+            }
         }
     }
 </script>

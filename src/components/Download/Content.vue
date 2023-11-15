@@ -1,20 +1,23 @@
 <template>
     <div class="main-body">
         <div class="title">
-            <h2>Download</h2>
+            <h1>Download</h1>
         </div>
-        <Loading v-if="isLoading" />
+        <Loading v-if="isLoading"/>
         <div class="content" v-else>
-            <DownloadList/>
-            <transition name="detail">
-                <Detail v-if="readDownloadItem.show" :item="readDownloadItem.info" :addSpop="addSpop"/>
-            </transition>
-            <div class="spop-body">
-                <transition-group name="spop">
-                    <Spop v-for="(spop,index) in spopList" :key="index" :spop="spop" :deleteSpop="deleteSpop"/>
-                </transition-group>
-            </div>
-        <PageControl/>
+            <Error v-if="isError"></Error>
+            <template v-else>
+                <DownloadList/>
+                <transition name="detail">
+                    <Detail v-if="readDownloadItem.show" :item="readDownloadItem.info" :addSpop="addSpop"/>
+                </transition>
+                <div class="spop-body">
+                    <transition-group name="spop">
+                        <Spop v-for="(spop,index) in spopList" :key="index" :spop="spop" :deleteSpop="deleteSpop"/>
+                    </transition-group>
+                </div>
+                <PageControl/>
+            </template>
         </div>
     </div>
 </template>
@@ -27,6 +30,8 @@
     import PageControl from './PageControl'
     import Spop from '@/components/Subpage/Spop';
     import Loading from '../Subpage/Loading';
+    import Error from '../Subpage/Error.vue';
+
     export default {
         name:"Download",
         data(){
@@ -35,7 +40,7 @@
             }
         },
         computed:{
-            ...mapGetters('videoInfo',['readDownloadItem','isLoading'])
+            ...mapGetters('videoInfo',['readDownloadItem','isLoading','isError'])
         },
         methods:{
             addSpop(status){
@@ -50,7 +55,8 @@
             Detail,
             Spop,
             PageControl,
-            Loading
+            Loading,
+            Error
         }
     }
 </script>
@@ -102,16 +108,16 @@
         }
     }
   @media screen and (orientation: landscape) {
-    .main-body .title{
-        font-size: 6vh;
+    .title > h1{
+        font-size: 10vh;
     }
     .content{
         min-height: 60vh;
     }
   }
   @media screen and (orientation: portrait) {
-    .main-body .title{
-        font-size: 3vh;
+    .title > h1{
+        font-size: 6vh;
     }
     .content{
         min-height: 65vh;
@@ -124,7 +130,7 @@
         width: 100%;
     }
     .main-body .title{
-        margin: 0 14.9% 2vh;
+        margin: 0 9.5vw 2vh;
         color: white;
         user-select:none;
     }

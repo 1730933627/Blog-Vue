@@ -11,10 +11,11 @@
         <div class="new_topics">
             <span>New Topics</span>
         </div>
-        <div class="new_topics_p" id="new_topics_p">
-            <div  v-for="item,index in msgs_topics" :key="index">
+        <div class="error" v-text="'出现错误,请联系管理员'" v-if="isError"></div>
+        <div class="new_topics_p" id="new_topics_p" v-else>
+            <div  v-for="(item,index) in msgs_topics" :key="index">
                 <span class="time">{{item.year}}.{{item.month}}</span>
-                <a :href=item.video_url target="_blank" class="word">
+                <a @click="openUrl(item.video_url)" class="word">
                     <span id="item_name">{{item.name}}</span>
                 </a>
             </div>
@@ -29,11 +30,11 @@ export default {
     data(){
         return{
             first:true,
-            isShow:(localStorage.getItem('topicsShow')==="true"||false) ? true : false
+            isShow:(localStorage.getItem('topicsShow') === "true" || false)
         }
     },
     computed:{
-        ...mapGetters('videoInfo',['readInfoListAll']),
+        ...mapGetters('videoInfo',['readInfoListAll','isError']),
         ...mapGetters('heardStatus',['getStatus']),
         msgs_topics(){
             const List = [];
@@ -66,6 +67,18 @@ export default {
                 }else this.isShow = true;
             }
             localStorage.setItem('topicsShow',!this.isShow);
+        },
+        openUrl(link){
+            if(link==="/404"){this.$router.push({name:'NotFound'})
+            }else if(!link.indexOf("http")){
+              window.open(link,"_blank");
+            }else{
+              const type = link.split("?")[0];
+              const id = link.split("?")[1].split("=")[1];
+              if(type==="article"){
+                this.$router.push({name: 'Article',query:{id}});
+              }
+            }
         }
     },
     mounted(){
@@ -89,6 +102,12 @@ export default {
         min-height: 25vh;
     }    
 }
+    .error{
+        font-size: 3vh;
+        margin: 7.5vh auto;
+        color: white;
+        user-select: none;
+    }
     #top_news_button{
         cursor: pointer;
     }
@@ -99,8 +118,7 @@ export default {
         left: 0;
         background-color: #00BFFF;
         transform: translate(-100%,0px);
-        transition-duration: 0.5s;
-        transition-timing-function: ease-in-out;
+        transition: all .5s ease-in-out;
         display: flex;
         align-items: baseline;
         flex-direction: column;
@@ -108,7 +126,8 @@ export default {
     .top_news{
         position: absolute;
         top:0;
-        right: -3.9vh;
+        right: 0;
+        transform: translateX(100%);
         border-top: 7vh solid #00BFFF;
         border-right: 1.5vh solid transparent;
         width: 2.5vh;
@@ -141,13 +160,16 @@ export default {
         color: #fff;
     }
     .new_topics_p > div{
-        padding: 0.75vh 7.5% 0;
+        padding: 0.75vh 7.5% 0 1%;
+        display: flex;
+        align-items: center;
     }
     .new_topics_p .time{
         margin-right: 3%;
         user-select: none;
     }
     .new_topics_p .word{
+        cursor: pointer;
         color: #fff;
     }
     .new_topics_p .word a:hover{

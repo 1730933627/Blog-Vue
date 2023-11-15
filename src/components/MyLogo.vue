@@ -1,27 +1,52 @@
 <template>
-    <div :class="logoStyle">
-        <router-link to="/"><img src="images/icon/logo.png" ondragstart="return false"/></router-link>
+    <div :class="logoStyle" :style=logoAnime>
+        <router-link to="/"><img src="images/icon/logo.png" ondragstart="return false" alt="logo"/></router-link>
     </div>
 </template>
 
 <script>
+    import {mapGetters,mapActions} from 'vuex'
     export default {
         name:"MyLogo",
         computed:{
+            ...mapGetters('windowSize',['getLogoStatus']),
             logoStyle(){
-                if(this.$route.fullPath == '/'){
+                if(this.$route.fullPath === '/'){
                     return "logo-h";
                 }else return "logo";
+            },
+            logoAnime(){
+              if(this.$route.fullPath === '/'){
+                this.homeLogo()
+                return "animation:logoInH .3s ease-out"
+              }else{
+                this.elseHome()
+                if(this.getLogoStatus<=1)return "animation:logoIn .3s ease-out"
+                else return "";
+              }
             }
-        }
+        },
+      methods:{
+          ...mapActions('windowSize',['homeLogo','elseHome'])
+      }
     }
 </script>
 
 <style>
+@keyframes logoInH {
+  0%{transform: scale(.85)}
+  75%{transform: scale(1.025)}
+  100%{transform: scale(1)}
+}
+@keyframes logoIn {
+  0%{transform: translateX(-1vw)}
+  100%{transform: translateX(0)}
+}
+
 /* Home */
 @media screen and (orientation: landscape) {
     .logo-h{
-        position: absolute;
+        position: fixed;
         top:10%;
         left:7%;
         width: 25%;
@@ -39,9 +64,6 @@
 }
 @media screen and (orientation: portrait) {    
     .logo-h{
-        position:absolute;
-        top: 0;
-        right: 0;
         width: 40%;
         display: block;
         position: fixed;

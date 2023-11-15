@@ -3,22 +3,43 @@ export default {
     namespaced:true,
     actions:{
         getInfoList(context,value=false){
-            if(!context.state.initList.length){
-                axios.post('https://api.yanlinn.com/getvideoinfo').then(res => {
+            context.commit("deleteInitList");
+            context.commit("deleteInfoList");
+            axios.post(process.env.VUE_APP_URL+'getvideoinfo').then(
+                res => {
+                    let maxId = 0;
                     res.data.data.forEach(element => {
+                        if(element.id>maxId)maxId = element.id;
                         if(element.img_url.split("/").length === 1){
-                            element.img_url = "/images/cover/"+element.img_url;
+                            element.img_url = process.env.VUE_APP_IMAGE_URL+"MMD/"+element.img_url;
                         }else if(element.img_url.split("/").length === 4){
-                            element.img_url = "/images/cover/"+element.img_url.split("/")[3];
+                            element.img_url = process.env.VUE_APP_IMAGE_URL+"MMD/"+element.img_url.split("/").pop();
+                        }else{
+                            element.img_url = process.env.VUE_APP_IMAGE_URL+"MMD/"+"cb.jpg";
+                        }
+                        if(element.year&&!context.state.year.includes(element.year)){
+                            context.state.year.push(element.year);
+                        }
+                        if(element.month&&!context.state.month.includes(element.month.split("/")[0])){
+                            context.state.month.push(element.month.split("/")[0]);
+                        }
+                        if(element.type&&!context.state.types.includes(element.type)){
+                            context.state.types.push(element.type);
                         }
                     });
+                    context.commit('changeMaxId',maxId);
                     context.commit('saveInfoList',{data:res.data.data,status:value});
-                }).catch(err=>{
-                    console.log(err);
-                })
-            }else{
-                context.commit('saveInfoList',{data:context.state.initList,status:value});
-            }
+                },
+                err => {
+                    console.log(err.message);
+                    context.commit('isError',true);
+                }
+            )
+        },
+        getItem(context,value){
+            return context.getters.readInfoListAll.filter(item=>{
+                if(item.id===Number(value))return item;
+            })
         }
     },
     mutations:{
@@ -34,7 +55,15 @@ export default {
                 state.info = value.data;
             }
             state.news.PageEnd = Math.floor(state.info.length / state.news.PageSize);
-            state.download.PageEnd = Math.floor(state.info.length / state.download.PageSize);
+            state.download.PageEnd = Math.floor(state.info.filter(item=>{
+                if(item.bdy_video&&item.type==="Video")return item;
+            }).length / state.download.PageSize);
+        },
+        deleteInitList(state,value){
+            state.initList = [];
+        },
+        deleteInfoList(state,value){
+            state.info = [];
         },
         changeType(state,value){
             state.type = value;
@@ -63,6 +92,12 @@ export default {
         },
         setDownloadShow(state,value){
             state.download.item.show = value.show;
+        },
+        isError(state,value){
+            state.error = value;
+        },
+        changeMaxId(state,value){
+            state.maxID = value;
         }
     },
     state:{
@@ -83,13 +118,30 @@ export default {
                 info:{}
             }
         },
+        year:[],
+        month:[],
+        types:[],
+        error:false,
+        maxID:0,
+        defaultImg:process.env.VUE_APP_IMAGE_URL+"MMD/"+"cb.jpg"
     },
     getters:{
+        getDefaultImg(state){
+            return state.defaultImg;
+        },
         isInit(state){
             return state.initList.length === 0;
         },
         isLoading(state){
-            return state.info.length === 0;
+            if(state.error){
+                return false;
+            }
+            else{
+                return state.info.length === 0;
+            }
+        },
+        getMaxId(state){
+            return state.maxID===0?false:state.maxID;
         },
         readDownloadItem(state){
             return state.download.item;
@@ -99,17 +151,29 @@ export default {
         },
         readInfoListOfVideo(state){
             return state.info.filter(item => {
-                if(item.type == "Video")return item;
+                if(item.type === "Video")return item;
             });
         },
         readInfoListOfType(state){
-            if(state.type == 'All'){
+            if(state.type === 'All'){
                 return state.info;
             }else{
                 return state.info.filter(item => {
-                    if(item.type == state.type)return item;
+                    if(item.type === state.type)return item;
                 });
             }
+        },
+        isError(state){
+            return state.error;
+        },
+        getYear(state){
+            return state.year;
+        },
+        getMonth(state){
+            return state.month;
+        },
+        getTypes(state){
+            return state.types;
         },
     },
 }

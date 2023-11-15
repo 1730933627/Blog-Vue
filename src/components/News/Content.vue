@@ -1,11 +1,16 @@
 <template>
-    <div class="bottom" id="bottom">
-        <div id="btop"></div>
+    <div class="bottom">
+        <div class="title">
+            <h1>NEWS</h1>
+        </div>
         <Loading v-if="isLoading"/>
         <div class="news-list" v-else>
-            <NewsSort/>
-            <NewsList/>
-            <PageControl/>
+            <Error v-if="isError"></Error>
+            <template v-else>
+                <NewsSort/>
+                <NewsList/>
+                <PageControl/>
+            </template>
         </div>
     </div>
 </template>
@@ -16,6 +21,7 @@
     import NewsSort from '@/components/News/NewsSort'
     import NewsList from '@/components/News/NewsList'
     import PageControl from '@/components/News/PageControl'
+    import Error from '../Subpage/Error.vue'
 
     export default {
         name:"Content",
@@ -23,10 +29,11 @@
             NewsList,
             NewsSort,
             PageControl,
-            Loading
+            Loading,
+            Error
         },
         computed:{
-            ...mapGetters('videoInfo',['isLoading'])
+            ...mapGetters('videoInfo',['isLoading','isError']),
         },
     }
 </script>
@@ -38,5 +45,25 @@
     }
     .bottom #btop{
         height:10vh;
+    }
+    .title{
+        color: white;
+        user-select:none;
+    }
+    @media screen and (orientation: landscape) {
+        .title{
+          margin: 10vh 15.5vw 2vh;
+        }
+        .title > h1{
+            font-size: 10vh;
+        }
+    }
+    @media screen and (orientation: portrait) {
+        .title > h1{
+            font-size: 8vh;
+        }
+        .title{
+          margin: 10vh 9vw 2vh;
+        }
     }
 </style>

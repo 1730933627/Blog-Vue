@@ -23,11 +23,10 @@
                         if(item.video_password==null){
                             item.video_password = "Null";
                         }
-                        if(item.photo_password.substring(0,3)=="解压码" || item.photo_password=="没有分享链接"){
-                            item.photo = "【无】";
-                        }
-                        if(item.video_url.substring(8,22)=="ecchi.iwara.tv" && item.bdy_photo == null){
-                            item.photo_password = "解压码:yanlin";
+                        const text = item.video_url.split("/")[2]
+                        if((text==="ecchi.iwara.tv"||text=== "www.iwara.tv") && item.bdy_photo == null){
+                          item.photo = "【无】";
+                          item.photo_password = "解压码:yanlin";
                         }
                         List.push(item);
                     }
@@ -47,12 +46,17 @@
 </script>
 
 <style scoped>
+    @keyframes cardIn {
+        0%{transform: translateY(-1vh)}
+        100%{transform: translateY(0)}
+    }
     .center{
-        width: 70%;
+        width: 80%;
         margin: 0 auto;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: space-between;
+        animation: cardIn .5s ease-out;
     }
 </style>

@@ -2,7 +2,7 @@ const express = require('express')
 const history = require('connect-history-api-fallback')
 
 const app = express()
-app.use(history)
+app.use(history())
 
 //没有dist要使用命令 npm run build
 app.use(express.static(__dirname+'/dist'))

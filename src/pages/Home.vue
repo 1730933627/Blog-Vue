@@ -7,7 +7,7 @@
             <MyLogo/>
             <LinkList/>
             <Sidebar/>
-            <Heart/>
+            <Heart :changeLoading="changeLoading"/>
             <Topics/>
             <Footer/>
         </div>
@@ -41,21 +41,30 @@
         },
         data(){
             return{
-                Loading:true,
+                Loading:false,
             }
         },
         computed:{
             ...mapGetters('videoInfo',['isInit'])
         },
-        mounted(){
-            if(this.isInit){
-                setTimeout(() => {
-                    this.Loading = false;
-                },1500)
-            }else{
+        methods:{
+            changeLoading(){
+              this.Loading = true;
+              setTimeout(()=>{
                 this.Loading = false;
+              },1000)
             }
+        },
+      beforeMount() {
+        if(this.isInit){
+          this.Loading = true;
+          setTimeout(() => {
+            this.Loading = false;
+          },1500)
+        }else{
+          this.Loading = false;
         }
+      },
     }
 </script>
 

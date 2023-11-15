@@ -1,8 +1,8 @@
 <template>
     <div class="item">
-        <a :href=item.video_url target="_blank">
+        <a @click="openLink(item.video_url)" style="cursor: pointer;">
             <div class="image">
-                <img :src="item.img_url"/>
+                <img v-lazy="item.img_url" @error="defaultImg" alt="" :key="item.img_url"/>
             </div>
             <div id="data">
                 <p>
@@ -19,9 +19,33 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
     export default {
         name:"NewsItem",
-        props:['item']
+        props:['item'],
+        computed:{
+          ...mapGetters('videoInfo',['getDefaultImg']),
+        },
+        methods:{
+          defaultImg(e){
+            const img = e.srcElement;
+            img.src = this.getDefaultImg;
+            img.onerror = null;
+          },
+          openLink(link){
+            if(link==="/404"){this.$router.push({name:'NotFound'})
+            }else if(!link.indexOf("http")){
+                window.open(link,"_blank");
+            }else{
+                const type = link.split("?")[0];
+                const id = link.split("?")[1].split("=")[1];
+                if(type==="article"){
+                  this.$router.push({name: 'Article',query:{id}});
+                }
+            }
+          }
+        }
     }
 </script>
 
@@ -77,7 +101,7 @@
         color: #3b3b3b;
         word-break: break-all;
         background-color: #fff;
-        box-shadow: 0px 0px 0.5vw #008ee0;
+        box-shadow: 0 0 0.5vw #008ee0;
         transition: transform 0.2s ease-in-out;
         animation: item-in 0.5s ease-in-out;
     }

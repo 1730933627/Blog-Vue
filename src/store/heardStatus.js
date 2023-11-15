@@ -8,7 +8,7 @@ export default {
         },
     },
     state:{
-        status:(sessionStorage.getItem('heart')==="true"||false) ? true : false,
+        status:(sessionStorage.getItem('heart') === "true" || false),
     },
     getters:{
         getStatus(state){

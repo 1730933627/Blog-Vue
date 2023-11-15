@@ -1,5 +1,5 @@
 <template>
-    <img @click="toTop" src="images/icon/jt (2).png" class="jt">
+    <img @click="toTop" src="images/icon/jt (2).png" class="jt" alt="toTop">
 </template>
 
 <script>
@@ -8,7 +8,7 @@ export default {
     methods:{
         toTop(){
             let smoothScrollToTopSetInterval = setInterval(() => {
-                let Y_TopValve = (window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop);
+                let Y_TopValve = (document.body.scrollTop || document.documentElement.scrollTop);
                 if (Y_TopValve > 1) {
                     scrollTo(0, Math.floor(Y_TopValve * 0.85));
                 } else {
@@ -52,6 +52,7 @@ export default {
         transition: transform 0.25s ease-in-out;
     }
     .jt{
+        z-index: 10;
         width:4vh;
         position: fixed;
         cursor:pointer;

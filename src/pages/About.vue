@@ -15,8 +15,8 @@
         components:{
             MyLogo,
             LinkList,
-            Footer,
-            Content
+            Content,
+            Footer
         }
     }
 </script>

@@ -5,29 +5,38 @@
             <div class="interval">
                 <div class="title">发送类型:</div>
                 <div class="radio-body">
-                    <div><input type="radio" name="types" value="通讯" id="radio1" v-model="userInfo.type"><label for="radio1" id="radio">通讯</label></div>
-                    <div><input type="radio" name="types" value="咨询" id="radio2" v-model="userInfo.type"><label for="radio2" id="radio">咨询</label></div>
-                    <div><input type="radio" name="types" value="其他" id="radio3" v-model="userInfo.type"><label for="radio3" id="radio">其他</label></div>
+                    <div>
+                      <input type="radio" name="types" value="通讯" id="radio1" v-model="userInfo.type">
+                      <label for="radio1" id="radio">通讯</label>
+                    </div>
+                    <div>
+                      <input type="radio" name="types" value="咨询" id="radio2" v-model="userInfo.type">
+                      <label for="radio2" id="radio">咨询</label>
+                    </div>
+                    <div>
+                      <input type="radio" name="types" value="其他" id="radio3" v-model="userInfo.type">
+                      <label for="radio3" id="radio">其他</label>
+                    </div>
                 </div>
             </div>
             <div class="interval">
-                <label for="name"><div class="title">称呼:</div></label>
+                <label for="name"><span class="title">称呼:</span></label>
                 <input id="name" type="text" name="name" v-model="userInfo.name">
             </div>
             <div class="interval">
-                <label for="email"><div class="title">电子邮箱:</div></label>
+                <label for="email"><span class="title">电子邮箱:</span></label>
                 <input id="email" type="email" name="email" v-model="userInfo.email">
             </div>
-            <div class="interval">
-                <label for="texts"><div class="title">发送内容:</div></label>
-                <textarea name="texts" v-model="userInfo.text"></textarea>
+            <div class="interval" style="align-items: flex-start">
+                <label for="texts"><span class="title">发送内容:</span></label>
+                <textarea id="texts" ref="infoTextarea" name="texts" v-model="userInfo.text"></textarea>
             </div>
             <div class="text">
                 <p>我们仅将查询表中输入的个人信息用于回答查询内容。</p>
                 <p>我已经阅读了所有人的意见，印象和询问，我们不承诺单独答复和回应。谦虚地感谢您的理解。</p>
-                <div class="agree-body">
-                    <input type="checkbox" name="agreement" v-model="userInfo.agree">
-                    <span @click="userInfo.agree=!userInfo.agree">我同意</span>
+                <div class="agree-body" :style="`${userInfo.agree?'transform:scale(1.1)':''}`">
+                    <input type="checkbox" name="agreement" v-model="userInfo.agree" style="color: #00BFFF">
+                    <span @click="agree">我同意</span>
                 </div>
             </div>
             <div class="submit">
@@ -56,15 +65,15 @@
         },
         methods:{
             button(){
-                if(this.userInfo.name!="" && this.userInfo.email!=""){
+                if(this.userInfo.name!=="" && this.userInfo.email!==""){
                     this.showStatus("正在发送···");
-                    let url = "https://api.yanlinn.com/insert";
-                    const param = new URLSearchParams();
-                    param.append('name', this.userInfo.name);
-                    param.append('types', this.userInfo.type);
-                    param.append('email', this.userInfo.email);
-                    param.append('texts', this.userInfo.text);
-                    axios.post(url,param).then(response=>{
+                    let url = process.env.VUE_APP_URL+"insert";
+                    axios.post(url, {
+                      name: this.userInfo.name,
+                      types: this.userInfo.type,
+                      email: this.userInfo.email,
+                      texts: this.userInfo.text
+                    }).then(response=>{
                         if(response.data.status === 200){
                             this.showStatus("发送成功");
                             this.userInfo = {type:"通讯",name:"",email:"",text:"",agree:false};
@@ -80,15 +89,26 @@
                 else{
                     this.showStatus("请输入称呼和邮箱");
                 }
+            },
+            agree(){
+                this.userInfo.agree=!this.userInfo.agree;
             }
         },
         watch:{
             "userInfo.agree":{
                 immediate:true,
-                handler(newvalue){
-                    if(newvalue)this.buttonStyle="cursor:pointer";
+                handler(newValue){
+                    if(newValue)this.buttonStyle="cursor:pointer";
                     else this.buttonStyle="cursor:not-allowed;";
                 }
+            },
+            "userInfo.text":{
+              handler(newVal,oldVal){
+                const textarea = this.$refs['infoTextarea']
+                if(textarea.clientHeight<textarea.scrollHeight){
+                  textarea.style.height = textarea.scrollHeight + 'px'
+                }
+              }
             }
         }
     }
@@ -100,7 +120,13 @@
         width: 50%;
     }
     .contact > h1{
-        margin: 1vh 23.5%;
+        margin: 1vh 23vw;
+    }
+    .contact input[type=text],input[type=email],textarea {
+      width: 80%;
+    }
+    .contact input[type=text]:focus,input[type=email]:focus,textarea:focus{
+      width: 81%;
     }
   }
   @media screen and (orientation: portrait) {
@@ -108,7 +134,13 @@
         width: 75%;
     }
     .contact > h1{
-        margin: 0.1vh 23.5% 0.5vh;
+        margin: 0.1vh 5vw 0.5vh;
+    }
+    .contact input[type=text],input[type=email],textarea {
+      width: 92.5%;
+    }
+    .contact input[type=text]:focus,input[type=email]:focus,textarea:focus{
+      width: 95%;
     }
   }
     .contact{
@@ -121,19 +153,26 @@
         color: white;
         user-select: none;
     }
+    @keyframes contactBodyIn{
+        0%{transform: translateX(-2vw)}
+        100%{transform: translateX(0)}
+    }
     .contact-body{
         margin: 0 auto;
         padding: 4vh 3.5vh;
         background-color: #87CEFA;
         box-shadow: 0 0 3vh #3eb5ff;
         border-radius: 3vh;
+        animation: contactBodyIn .75s ease-out;
     }
     .interval{
-        margin-bottom: 1vh;
+        padding: 2vh 0;
         display: flex;
-        align-items: baseline;
+        align-items: center;
+        flex-wrap: wrap;
     }
     .interval .title{
+        display: block;
         width: 6em;
         font-size: 2.5vh;
         color: white;
@@ -145,52 +184,78 @@
         display: flex;
         align-items: center;
         justify-content: space-evenly;
-        width: 60%;
     }
     .radio-body > div{
         display: flex;
         align-items: center;
-        width: 33%;
+        margin-right: 3vw;
+        transition: transform .25s ease-in-out;
     }
     #radio{
         color: white;
-        margin: 0 4% 0 5%;
         font-size: 2vh;
         cursor: pointer;
         user-select: none;
+        padding-left: .5vh;
+        white-space:nowrap;
     }
     .contact input[type=text],input[type=email],textarea{
-        width: 85%;
-        margin-top: 2vh;
         border: 1px solid #696969;
         transition: all 0.35s ease-in-out;
+        font-size: 2vh;
+        padding: 0.15vh 0.75vh;
+        outline: none;
+        color: #5e5e5e;
+        border-radius: .25vh;
     }
     .contact input[type=text],input[type=email]{
         height: 3vh;
-        padding: 0.1vh 0.75vh;
-        font-size: 1.5vh;
     }
     .contact textarea{
-        padding: .75vh;
         min-height: 10vh;
-        resize: vertical;
-        font-size: 2vh;
+        resize: none;
     }
+    .contact textarea::-webkit-scrollbar {display: none;}
     .contact input:focus,.contact textarea:focus{
         background-color: aliceblue;
-        outline: none;
     }
-    .contact input:hover,.contact textarea:hover{
+    .contact textarea:hover{
         background-color: aliceblue;
-        border: 1px solid black;
     }
     .contact input:invalid,.contact textarea:invalid{
         border: 1px solid red;
     }
     .radio-body input[type=radio]{
-        cursor: pointer;
-        width: 2vh;
-        height: 2vh;
+      appearance: none;
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      width: 1.25em;
+      height: 1.25em;
+      background: white;
+      font-size: 2vh;
+      cursor: pointer;
+      outline: none;
+      transition: all .2s ease;
+      border-radius: 50%;
+    }
+    .radio-body input[type="radio"]:after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      background: #00BFFF;
+      border-radius: 50%;
+      width: 0;
+      height: 0;
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      transition: all .2s ease;
+    }
+    .radio-body input[type="radio"]:checked:after {
+      width: .75em;
+      height: .75em;
+      opacity: 1;
     }
     .text{
         color: white;
@@ -207,6 +272,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        transition: transform 0.25s ease-in-out;
     }
     .agree-body > input{
         width: 2vh;
@@ -219,6 +285,7 @@
         font-size: 2.25vh;
         cursor:pointer;
         margin-left: 1vh;
+        padding-bottom: .25vh;
     }
     .submit{
         user-select: none;

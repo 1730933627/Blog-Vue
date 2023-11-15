@@ -8,6 +8,12 @@ export default {
                     context.commit('CHANGEWIDTH',window.innerWidth);
                 })()
             }
+        },
+        homeLogo(context){
+            context.commit('ChangeLogo',0);
+        },
+        elseHome(context){
+            context.state.logoAnime += 1;
         }
     },
     mutations:{
@@ -17,10 +23,14 @@ export default {
         CHANGEWIDTH(state,value){
             state.Width = value;
         },
+        ChangeLogo(state,value){
+            state.logoAnime = value;
+        }
     },
     state:{
         Height:window.innerHeight||0,
-        Width:window.innerWidth||0
+        Width:window.innerWidth||0,
+        logoAnime:0
     },
     getters:{
         getHeight(state){
@@ -30,7 +40,10 @@ export default {
             return state.Width;
         },
         isLandscape(state){
-            return state.Height<state.Width ? true : false;
+            return state.Height < state.Width;
+        },
+        getLogoStatus(state){
+            return state.logoAnime;
         }
     },
 }

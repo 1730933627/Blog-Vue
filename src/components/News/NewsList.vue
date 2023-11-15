@@ -41,17 +41,22 @@
 <style scoped>
   @media screen and (orientation: landscape) {
     .centerview{
-        max-width: 67vw;
+        max-width: 70%;
     }
   }
   @media screen and (orientation: portrait) {
     .centerview{
-        max-width: 75vw;
+        max-width: 80%;
     }
 }
+    @keyframes cardIn {
+      0%{transform: translateY(-1vh)}
+      100%{transform: translateY(0)}
+    }
     .normal{
         width: 100%;
         margin-top: 2vh;
+        animation: cardIn .5s ease-out;
     }
     .pickup{
         background-color: rgb(93, 193, 255);

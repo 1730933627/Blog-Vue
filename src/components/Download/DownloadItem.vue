@@ -1,6 +1,6 @@
 <template>
     <div class="item" @click="showInfo">
-        <img :src="item.img_url"/>
+        <img v-lazy="item.img_url" @error="defaultImg" alt="" :key="item.img_url"/>
         <div class="item_info">
             <h5>{{item.name}}</h5>
         </div>
@@ -22,9 +22,14 @@
                     },750)
                 }else this.saveDownloadItem({show:true,info:this.item})
             },
+            defaultImg(e){
+              const img = e.srcElement;
+              img.src = this.getDefaultImg;
+              img.onerror = null;
+            }
         },
         computed:{
-            ...mapGetters('videoInfo',['readDownloadItem'])
+            ...mapGetters('videoInfo',['readDownloadItem','getDefaultImg'])
         },
     }
 </script>

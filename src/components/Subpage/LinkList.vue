@@ -1,28 +1,24 @@
 <template>
-    <div class="open_menu" @click="isShow=!isShow" :style="HomeStyle">
-        <img src="images/icon/menu.png"/>
+    <div class="open_menu" @click="isShow=!isShow" :style="HomeStyle+menuAnime" ref="menuButton">
+        <img src="images/icon/menu.png" draggable="false" alt="menu"/>
     </div>
     <div class="top" v-show="isHome"></div> 
     <transition name="menu">
-        <div class="menu_list" v-show="isShow" :style="HomeStyle">
-            <ul>
-                <router-link to="/"><li class="list">Home</li></router-link>
-                <router-link to="/news"><li class="list">News</li></router-link>
-                <router-link to="/biography"><li class="list">Biography</li></router-link>
-                <span id="Links" v-if="getStatus">
-                    <li class="list">
-                        <div class="dropdown">
-                            <span>Links</span>
-                            <div class="dropdown-content" :style="dropdownStyle">
-                                <a href="https://space.bilibili.com/22516494" target="_blank">BiliBili</a>
-                                <a href="https://ecchi.iwara.tv/users/yanlin-0" target="_blank">Iwara</a>
-                            </div>
-                        </div>
-                    </li>
-                </span>
-                <a v-else href="https://space.bilibili.com/22516494" target="_blank"><li class="list">BiliBili</li></a>
-                <router-link to="/download"><li class="list">Download</li></router-link>
-                <router-link to="/contact"><li class="list">Contact</li></router-link>
+        <div class="menu_list" v-show="isShow" :style="HomeStyle" ref="menuList">
+            <ul :style="isHome?'align-items: flex-end;':''">
+              <li class="list"><router-link to="/">Home</router-link></li>
+              <li class="list"><router-link to="/news">News</router-link></li>
+              <li class="list"><router-link to="/biography">Biography</router-link></li>
+              <li class="list" id="Links" v-if="getStatus" style="position: relative">
+                <a>Links</a>
+                <div class="dropdown-content" :style="dropdownStyle">
+                  <a :href="LinkList.BiliBili.url" target="_blank">BiliBili</a>
+                  <a :href="LinkList.Iwara.url" target="_blank">Iwara</a>
+                </div>
+              </li>
+              <li class="list" v-else><a :href="LinkList.BiliBili.url" target="_blank">BiliBili</a></li>
+              <li class="list"><router-link to="/download">Download</router-link></li>
+              <li class="list"><router-link to="/contact">Contact</router-link></li>
             </ul>
         </div>
     </transition>
@@ -34,20 +30,24 @@
         name:"LinkList",
         data(){
             return{
-                isShow:window.innerHeight<window.innerWidth?true:false,
+                isShow:window.innerHeight < window.innerWidth,
             }
         },
         computed:{
             ...mapGetters('heardStatus',['getStatus']),
             ...mapGetters('windowSize',['getHeight','isLandscape']),
+            ...mapGetters("links",["LinkList"]),
             isHome(){
-                return this.$route.fullPath == "/"?false:true;
+                return this.$route.fullPath !== "/";
             },
             HomeStyle(){
-                return this.isHome?"right:1%":this.isLandscape?"right:2.5%":"left:2.5%;";
+                return this.isHome?"right:1%;":this.isLandscape?"right:2.5%;":"left:0%;";
             },
             dropdownStyle(){
-                return this.isHome ? this.isLandscape?"left:22.5%":"right:125%;":this.isLandscape?"left:22.5%":"left:225%;";
+                return this.isHome ? this.isLandscape?"left:0;top:100%":"right:100%;":this.isLandscape?"left:0;top:100%":"left:100%;";
+            },
+            menuAnime(){
+                return this.isShow?'transform: rotateZ(90deg);':''
             }
         },
         watch:{
@@ -55,6 +55,23 @@
                 this.isShow = this.isLandscape;
             }
         },
+        methods:{
+            closeMenu(e){
+              if(!this.$refs.menuButton.contains(e.target) && !(e.target.parentNode.parentNode.parentNode === this.$refs.menuList)){
+                this.isShow= false;
+              }
+            }
+        },
+        mounted() {
+            if(!this.isLandscape){
+              document.addEventListener("touchstart", this.closeMenu, false);
+              document.addEventListener("click", this.closeMenu, false);
+            }
+        },
+        beforeUnmount() {
+            document.removeEventListener("touchstart", this.closeMenu, false);
+            document.removeEventListener("click", this.closeMenu, false);
+        }
     }
 </script>
 
@@ -76,51 +93,42 @@
         align-items: center;
         user-select: none;
     }
-    #Links,ul a,ul a:visited{
+    ul a,ul a:visited{
         color:#00BFFF;
-    }
-    .dropdown-content{
-        padding: 10px 0px;
-        display: none;
-        position: fixed;
-        text-align: left;
+        padding: 1vh 2.5vh;
     }
     @keyframes dropdownR{
-        0%{padding-left: 6px;}
-        100%{padding-left: 0px;}
+        0%{margin-left: .5vw;}
+        100%{margin-left: 0;}
     }
     .dropdown-content a{
         animation: dropdownR 0.5s ease-in-out;
+        padding: 0 .25vh 0 2.5vh;
     }
-    .menu_list ul > a:hover,#Links:hover{
-        transform:translate(0px,-0.5vh);
-    }
-    .list{
-        margin: 1vh 2.5vh;
-    }
-    .dropdown-content a{
-        margin-right: 2.5vh;
+    .menu_list ul > li:hover,#Links:hover{
+        transform:translate(0,-0.5vh);
     }
 }
 @media screen and (orientation: portrait) {
     .open_menu{
         z-index: 100;
         cursor: pointer;
-        margin: 2vh;
-        width: 7.5vh;
+        margin: 1vh .1vh 1vh 1vh;
+        width: 8.5vh;
         position: fixed;
         top:0;
+        transition: transform .25s ease-out;
+        font-size: 0;
     }
-    .open_menu img{
-        width: 100%;
-    }
+    .open_menu img{width: 100%;}
     .menu_list{
         top: 10.5%;
+        margin: 0 .5vh 0 1vh;
     }
     .menu_list ul{
         flex-direction: column;
     }
-    #Links,ul a,ul a:visited,.dropdown-content > a{
+    ul a,ul a:visited,.dropdown-content > a{
         color:#00BFFF;
         background-color: white;
         border-radius: 1vh;
@@ -130,23 +138,21 @@
     }
     .dropdown-content{
         display: none;
-        flex-direction: column;
-        position: absolute;
-        top: -40%;
-    }
-    @keyframes dropdownP{
-        0%{margin-top: 0.75vh}
-        100%{margin-top: 0.5vh;}
+        top: 20%;
     }
     .dropdown-content a{
-        animation: dropdownP 0.5s ease-in-out;
+        margin-right: 2.5vw;
     }
-    .menu_list ul > a:hover,#Links:hover{
-        transform:translate(1vw,0px);
+    .menu_list ul > li:hover,#Links:hover{
+        transform:translateX(1vw);
     }
 }
-    .menu_list ul > a,#Links{
+
+    .menu_list ul > li,#Links{
         transition: transform 0.25s ease-in-out;
+    }
+    .list{
+      display: flex;
     }
     .top{
         position: fixed;
@@ -170,14 +176,11 @@
         text-decoration: none;
         font-size: 2.25vh;
     }
-    #Links{
-        cursor: default;
-    }
-    .dropdown{
-        position: relative;
-        display: inline-block;
+    .dropdown-content{
+      display: none;
+      position: absolute;
     }
     #Links:hover .dropdown-content{
-        display: flex;
+        display: block;
     }
 </style>
